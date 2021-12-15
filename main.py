@@ -15,7 +15,8 @@ from numpy.random import uniform
 
 def generate_graph():
     network = Graph.Famous('Zachary')
-    network.vs["is_infected"] = False
+    network.vs["is_infected"]   = False
+    network.vs["recovery_time"] = 0
 
     my_vcount  = network.vcount()
     p_infected = 0.1
@@ -25,9 +26,11 @@ def generate_graph():
     network.vs[res]["is_infected"] = True
     return network
 
+
 def run_simulation(network, iterations = 10):
 
     tx_prob = 0.5
+    max_recovery_time = 2
 
     for t in range(0,iterations):
 
@@ -37,12 +40,18 @@ def run_simulation(network, iterations = 10):
                 infected.append(p)
 
         for i in list(infected):
+            i["recovery_time"] -= 1
+            if i["recovery_time"] < 1:
+                i["is_infected"] = False
+
+
             neighbors = network.neighbors(i)
 
             for n in neighbors:
                 if network.vs[n]["is_infected"] == False:
                     if uniform() > tx_prob:
-                        network.vs[n]["is_infected"] = True
+                        network.vs[n]["is_infected"]   = True
+                        network.vs[n]["recovery_time"] = max_recovery_time
     
     return network
 
