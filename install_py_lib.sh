@@ -11,3 +11,4 @@ source ./venv/Scripts/Activate
 pip install igraph
 # pip install networkx
 pip install pycairo
+pip install numpy
